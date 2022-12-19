@@ -1,6 +1,6 @@
 name: Shell Commands 
 
-on: [pull_request]
+on: [push]
 
 jobs:
   run-shell-command:
@@ -12,4 +12,3 @@ jobs:
         run: |
           node -v 
           npm -v
-          
