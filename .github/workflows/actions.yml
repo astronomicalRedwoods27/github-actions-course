@@ -1,15 +1,31 @@
 name: Actions Workflow
 
 on:
-  repository_dispatch: 
-    types: [build]
+  push:
+    # see https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet for more
+    branches:
+      - master
+      - 'feature/*' # matches feature/featA, feature/featB, but not feature/feat/a
+      - 'feature/**' # matches all the above
+      - '!feature/featC' # ignores this branch, but mustn be put after wanted branches
+    tags:
+      - v1.*
+    paths:
+    - '**.js'
+    - '!filename.js'
+    # paths-ignore:
+    #   - 'doc/**'
+  # branches-ignore:
+  #   - null
+  # repository_dispatch: 
+  #   types: [build]
   # schedule:
     # "minutes hours day-of-month month day-of-week
     # - cron: "0/5 * * * *" 
     # - cron: "0/6 * * * *" 
   #push:
-  pull_request:
-    types: [closed, assigned, opened, reopened]
+  # pull_request:
+  #   types: [closed, assigned, opened, reopened]
 
 
 jobs:
