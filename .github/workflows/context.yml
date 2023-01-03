@@ -1,5 +1,5 @@
 name: Context listing
-on: push
+on: [push, pull_request]
 
 jobs:
   functions:
@@ -13,17 +13,37 @@ jobs:
           echo ${{ format('Hello {0} {1} {2}', 'World', '!', '!' ) }}
   dump_contexts_to_log:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Dump GitHub context
         id: github_context_step
-        run: echo '${{ toJSON(github) }}'
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: eccho "$GITHUB_CONTEXT"
       - name: Dump job context
-        run: echo '${{ toJSON(job) }}'
+        if: failure()
+        id: job_context_step
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
       - name: Dump steps context
-        run: echo '${{ toJSON(steps) }}'
+        id: steps_context_step
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
       - name: Dump runner context
-        run: echo '${{ toJSON(runner) }}'
+        if: always()
+        id: runner_context_step
+        env:
+          RUNNER_CONTEXT: ${{ toJSON(runner) }}
+        run: echo "$RUNNER_CONTEXT"
       - name: Dump strategy context
-        run: echo '${{ toJSON(strategy) }}'
+        id: strategy_context_step
+        env:
+          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
       - name: Dump matrix context
-        run: echo '${{ toJSON(matrix) }}'
+        id: matrix_context_step
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
