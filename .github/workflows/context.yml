@@ -19,7 +19,7 @@ jobs:
         id: github_context_step
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: eccho "$GITHUB_CONTEXT"
+        run: echo "$GITHUB_CONTEXT"
       - name: Dump job context
         if: failure()
         id: job_context_step
